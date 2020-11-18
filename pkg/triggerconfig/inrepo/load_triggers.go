@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/sirupsen/logrus"
+
 	"github.com/jenkins-x/go-scm/scm"
 	"github.com/jenkins-x/lighthouse/pkg/config"
 	"github.com/jenkins-x/lighthouse/pkg/config/job"
@@ -36,7 +38,9 @@ func MergeTriggers(cfg *config.Config, pluginCfg *plugins.Configuration, scmClie
 func LoadTriggerConfig(scmClient scmProviderClient, ownerName string, repoName string, sha string) (*triggerconfig.Config, error) {
 	m := map[string]*triggerconfig.Config{}
 	path := ".lighthouse"
+	logrus.Info("3a")
 	files, err := scmClient.ListFiles(ownerName, repoName, path, sha)
+	logrus.Info("3b")
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to find any lighthouse configuration files in repo %s/%s at sha %s", ownerName, repoName, sha)
 	}
@@ -99,7 +103,9 @@ func isDirType(t string) bool {
 }
 
 func loadConfigFile(client scmProviderClient, ownerName, repoName, path, sha string) (*triggerconfig.Config, error) {
+	logrus.Info("2a")
 	data, err := client.GetFile(ownerName, repoName, path, sha)
+	logrus.Info("2b")
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to find file %s in repo %s/%s with sha %s", path, ownerName, repoName, sha)
 	}
@@ -141,7 +147,9 @@ func loadConfigFile(client scmProviderClient, ownerName, repoName, path, sha str
 }
 
 func loadJobBaseFromSourcePath(client scmProviderClient, j *job.Base, ownerName, repoName, path, sha string) error {
+	logrus.Info("6a")
 	data, err := client.GetFile(ownerName, repoName, path, sha)
+	logrus.Info("6b")
 	if err != nil {
 		return errors.Wrapf(err, "failed to find file %s in repo %s/%s with sha %s", path, ownerName, repoName, sha)
 	}
@@ -154,7 +162,9 @@ func loadJobBaseFromSourcePath(client scmProviderClient, j *job.Base, ownerName,
 	message := fmt.Sprintf("in repo %s/%s with sha %s", ownerName, repoName, sha)
 
 	getData := func(path string) ([]byte, error) {
+		logrus.Info("1a")
 		data, err := client.GetFile(ownerName, repoName, path, sha)
+		logrus.Info("1b")
 		if err != nil && IsScmNotFound(err) {
 			err = nil
 		}

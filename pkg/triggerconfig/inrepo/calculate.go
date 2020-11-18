@@ -3,6 +3,8 @@ package inrepo
 import (
 	"strings"
 
+	"github.com/sirupsen/logrus"
+
 	"github.com/jenkins-x/go-scm/scm"
 	"github.com/jenkins-x/lighthouse/pkg/config"
 	"github.com/jenkins-x/lighthouse/pkg/plugins"
@@ -18,7 +20,9 @@ func Generate(scmClient scmProviderClient, sharedConfig *config.Config, sharedPl
 	}
 
 	// lets find the main branch
+	logrus.Info("4a")
 	repository, err := scmClient.GetRepositoryByFullName(fullName)
+	logrus.Info("4b")
 	if err != nil {
 		return sharedConfig, sharedPlugins, errors.Wrapf(err, "failed to find repository %s", fullName)
 	}

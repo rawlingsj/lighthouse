@@ -9,6 +9,7 @@ import (
 // GetRepositoryByFullName returns the repository details
 func (c *Client) GetRepositoryByFullName(fullName string) (*scm.Repository, error) {
 	ctx := context.Background()
+
 	r, _, err := c.client.Repositories.Find(ctx, fullName)
 	return r, err
 }
